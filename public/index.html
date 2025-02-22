@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjustable Time Display</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        #main-time { font-size: 50px; font-weight: bold; }
+        #local-time { font-size: 20px; color: gray; margin-top: 10px; }
+        #rtt-list { font-size: 16px; color: darkgray; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Time Display</h1>
+    <div id="main-time">Loading...</div> <!-- Changeable time -->
+    <div id="local-time">Loading...</div> <!-- Local device time -->
+    <h2>RTT History (ms)</h2>
+    <div id="rtt-list">Waiting for data...</div> <!-- Display RTT values -->
+
+    <script src="script.js"></script> <!-- External JavaScript -->
+</body>
+</html>
