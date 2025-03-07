@@ -1,23 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adjustable Time Display</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        #main-time { font-size: 50px; font-weight: bold; }
-        #local-time { font-size: 20px; color: gray; margin-top: 10px; }
-        #rtt-list { font-size: 16px; color: darkgray; margin-top: 10px; }
+        body {
+            background-color: black;
+            transition: background-color 0.3s ease-out;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1,
+        #main-time,
+        #local-time,
+        h2,
+        #rtt-list,
+        #offset-value {
+            color: white;
+            text-shadow:
+                -1px -1px 0 black,
+                1px -1px 0 black,
+                -1px 1px 0 black,
+                1px 1px 0 black;
+        }
+
+        #main-time {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        #local-time {
+            font-size: 20px;
+            color: white;
+            margin-top: 10px;
+        }
+
+        #rtt-list {
+            font-size: 16px;
+            color: white;
+            margin-top: 10px;
+        }
+
+        input[type="range"] {
+            width: 50%;
+        }
     </style>
 </head>
+
 <body>
     <h1>Time Display</h1>
-    <div id="main-time">Loading...</div> <!-- Changeable time -->
-    <div id="local-time">Loading...</div> <!-- Local device time -->
+    <div id="main-time">Loading...</div>
+    <div id="local-time">Loading...</div>
     <h2>RTT History (ms)</h2>
     <div id="rtt-list">Waiting for data...</div> <!-- Display RTT values -->
 
-    <script src="script.js"></script> <!-- External JavaScript -->
+    <h2>Adjust Offset</h2>
+    <input type="range" id="offset-slider" min="-300" max="300" value="0" step="1">
+    <span id="offset-value">0 ms</span>
+
+
+    <script src="script.js"></script>
 </body>
+
 </html>
