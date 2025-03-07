@@ -1,60 +1,53 @@
-let timeOffset = 0; // Offset in milliseconds (average RTT/2)
-const rttHistory = [];
-const ws = new WebSocket("ws://" + window.location.host);
+import { TimeSync } from "./sync.js";
+
+const FLASH_DURATION = 50;
+let timeSync = new TimeSync(updateMainTime);
+let mainTime = new Date();
+let nextBeatTime = 0;
+let isFlashing = false;
 
 function updateTime() {
     const now = new Date();
+    mainTime = timeSync.getCurrentTime();
+    nextBeatTime = timeSync.getNextBeatTime();
 
-    // Local device time
     document.getElementById("local-time").textContent = "Device Time: " + now.toISOString().slice(11, 23);
+    document.getElementById("main-time").textContent = "Synced Time: " + mainTime.toISOString().slice(11, 23);
 
-    // Adjusted time based on server time + offset
-    const adjustedTime = new Date(now.getTime() + timeOffset);
-    document.getElementById("main-time").textContent = adjustedTime.toISOString().slice(11, 23);
+    requestAnimationFrame(updateTime);
 }
 
-function calculateOffset() {
-    if (rttHistory.length > 0) {
-        const avgRTT = rttHistory.reduce((sum, val) => sum + val, 0) / rttHistory.length;
-        timeOffset = avgRTT / 2; // Offset = Half of average RTT
+function updateBackground() {
+    const now = mainTime.getTime();
+
+    if (nextBeatTime > 0 && now >= nextBeatTime - FLASH_DURATION && now < nextBeatTime) {
+        document.body.style.backgroundColor = "rgb(255, 255, 255)";
+        isFlashing = true;
+    } else if (isFlashing && now >= nextBeatTime) {
+        isFlashing = false;
+        fadeToBlack();
+        nextBeatTime += 60_000 / 80; // Move to next beat locally
     }
+
+    requestAnimationFrame(updateBackground);
 }
 
-// WebSocket logic
-ws.onopen = () => {
-    console.log("Connected to server");
-    setInterval(() => {
-        const timestamp = Date.now();
-        ws.send(JSON.stringify({ type: "ping", timestamp }));
-    }, 500); // Send request every 500ms
-};
+function fadeToBlack() {
+    document.body.style.backgroundColor = "black";
+}
 
-ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    if (data.type === "pong") {
-        const now = Date.now();
-        const rtt = now - data.clientTimestamp; // Calculate RTT
+// Switch from sync to beat mode
+document.getElementById("switch-mode").addEventListener("click", () => {
+    timeSync.switchToBeatMode();
+    document.getElementById("sync-status").textContent = "Mode: Beat Phase";
+});
 
-        // Keep last 10 RTT values
-        if (rttHistory.length >= 10) {
-            rttHistory.shift(); // Remove the oldest entry
-        }
-        rttHistory.push(rtt);
+// Start updates
+requestAnimationFrame(updateTime);
+requestAnimationFrame(updateBackground);
 
-        // Calculate new offset
-        calculateOffset();
-
-        // Adjust main time to match server time + estimated network delay
-        timeOffset = (data.serverTimestamp + timeOffset) - now;
-
-        // Update RTT display
-        document.getElementById("rtt-list").innerHTML = rttHistory.map(time => `${time} ms`).join("<br>");
-    }
-};
-
-ws.onclose = () => {
-    console.log("Disconnected from server");
-};
-
-// Update local and main time every millisecond
-setInterval(updateTime, 1);
+function updateMainTime(_, rttHistory, nextBeat, mode) {
+    nextBeatTime = nextBeat;
+    document.getElementById("rtt-list").innerHTML = rttHistory.map(time => `${time} ms`).join("<br>");
+    document.getElementById("sync-status").textContent = mode === "sync" ? "Mode: Sync Phase" : "Mode: Beat Phase";
+}

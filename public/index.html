@@ -3,21 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adjustable Time Display</title>
+    <title>Beat Synced Background</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        #main-time { font-size: 50px; font-weight: bold; }
-        #local-time { font-size: 20px; color: gray; margin-top: 10px; }
-        #rtt-list { font-size: 16px; color: darkgray; margin-top: 10px; }
+        body { 
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            height: 100vh;
+            background-color: black;
+            transition: background-color 0.1s linear;
+        }
+        #local-time, #main-time, #sync-status {
+            font-size: 20px;
+            color: white;
+            margin-top: 20px;
+        }
+        #rtt-list {
+            font-size: 16px;
+            color: gray;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            background-color: white;
+            color: black;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: gray;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <h1>Time Display</h1>
-    <div id="main-time">Loading...</div> <!-- Changeable time -->
-    <div id="local-time">Loading...</div> <!-- Local device time -->
-    <h2>RTT History (ms)</h2>
-    <div id="rtt-list">Waiting for data...</div> <!-- Display RTT values -->
+    <h1 style="color: white;">Beat Synced Background</h1>
+    
+    <!-- Sync/Beat Mode Switch Button -->
+    <button id="switch-mode">Switch to Beat Mode</button>
+    
+    <!-- Display Current Mode -->
+    <div id="sync-status">Mode: Sync Phase</div>
+    
+    <!-- Display Synced Time & Local Time -->
+    <div id="main-time">Loading synced time...</div>
+    <div id="local-time">Loading local time...</div>
+    
+    <!-- RTT History -->
+    <h2 style="color: white;">RTT History (ms)</h2>
+    <div id="rtt-list">Waiting for data...</div>
 
-    <script src="script.js"></script> <!-- External JavaScript -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
