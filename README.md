@@ -4,17 +4,21 @@ RTPC (Real-Time Performance Control) is a WebSocket-based system designed for sy
 
 ## Installation & Setup
 1. Clone the Repository
+
 ```
 git clone https://github.com/dalder6284/monodec-proto.git
 cd monodec-proto
 ```
 
-3. Install dependencies
+2. Install dependencies
+
 Make sure you have Node.js installed, then run
 `node install`
 
-5. Run the WebSocket Server
+3. Run the WebSocket Server
+
 `node server.js`
+
 This will start the server. The website can be seen on the `localhost:3000`, or at least the default port is 3000, but you are welcome to change that.
 
 ## Using the administrator control
